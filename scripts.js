@@ -16,14 +16,14 @@ document.addEventListener("DOMContentLoaded", () => {
   /// Hero Animation
   let tl = gsap.timeline();
 
-  /// Hero H1 Animation
-
   tl.fromTo(".navbar", {
     y: -100
   }, {
     duration: 1,
     y: 0
   }, "0");
+
+  /// Hero H1 Animation
 
   tl.fromTo("#hero-h1-1", {
     x: -200,
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     opacity: 0
   }, {
     x: 0,
-    duration: 3,
+    duration: 2,
     opacity: 2
   }, '0.5');
 
