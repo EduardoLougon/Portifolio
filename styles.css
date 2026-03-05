@@ -25,12 +25,29 @@ body {
   overflow-x: hidden;
 }
 
+::-webkit-scrollbar {
+  width: 12px;
+}
+
 body::-webkit-scrollbar-track {
-  background: #003E52;
+  background: var(--primary-bg);
 }
 
 body::-webkit-scrollbar-thumb {
-  background: #c3ff9c;
+  background: var(--secondary-color);
+}
+
+.cursor {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  pointer-events: none;
+  mix-blend-mode: difference;
 }
 
 .container {
@@ -213,11 +230,13 @@ a.nav-h1 {
 }
 
 .hero {
-  height: 100vh;
+  height: 100svh;
   display: flex;
   justify-content: center;
   align-items: center;
   padding-top: 60px;
+  overflow: hidden;
+  position: relative;
 }
 
 .hero-content {
@@ -239,17 +258,19 @@ a.nav-h1 {
 
 .hero-h1 {
   font-family: 'Geist', sans-serif;
-  width: 100vw;
+  width: fit-content;
   line-height: 0.9;
   font-size: 15vw;
   font-weight: 900;
   text-transform: uppercase;
   color: var(--secondary-color);
   text-wrap: nowrap;
+  cursor: default;
 }
 
 .hero-name {
   margin-top: auto;
+  width: 100vw;
 }
 
 .hero-p {

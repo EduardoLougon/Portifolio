@@ -71,4 +71,59 @@ document.addEventListener("DOMContentLoaded", () => {
     opacity: 1,
     stagger: 0.5,
   }, "1");
+
+
+  /// Cursor Animation
+
+  const handleMouseMove = (e) => {
+    const { clientX, clientY } = e
+    gsap.to(".cursor", {
+      x: clientX - 10,
+      y: clientY - 10,
+      duration: 1,
+      delay: 0,
+      ease: "power4.out"
+    })
+
+    // Subtly shift the hero image based on mouse position
+    const xPos = (clientX / window.innerWidth - 0.5);
+    const yPos = (clientY / window.innerHeight - 0.5);
+
+    gsap.to(".hero-img", {
+      x: xPos * 10,
+      y: yPos * 10,
+      rotationY: xPos,
+      rotationX: -yPos,
+      transformPerspective: 1000,
+      transformOrigin: "center center",
+      scale: 1.08,
+      ease: "power3.out",
+      duration: 1.5
+    });
+  }
+
+  const heroh1 = document.querySelectorAll(".hero-h1");
+
+  heroh1.forEach((hero) => {
+    hero.addEventListener("mouseenter", () => {
+      gsap.to(".cursor", {
+        scale: 8,
+        duration: 0.5,
+        ease: "power4.out"
+      })
+    })
+    hero.addEventListener("mouseleave", () => {
+      gsap.to(".cursor", {
+        scale: 1,
+        duration: 0.5,
+        ease: "power4.out"
+      })
+    })
+  })
+
+  window.addEventListener('mousemove', handleMouseMove);
+
+  return () => {
+    window.removeEventListener('mousemove', handleMouseMove);
+  }
 });
