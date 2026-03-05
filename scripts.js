@@ -20,7 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
     y: -100
   }, {
     duration: 1,
-    y: 0
+    y: 0,
+    ease: "power3.inOut"
   }, "0");
 
   /// Hero H1 Animation
@@ -31,7 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }, {
     x: 0,
     duration: 2,
-    opacity: 2
+    opacity: 2,
+    ease: "power1.out"
   }, '0.5');
 
   tl.fromTo("#hero-h1-2", {
@@ -40,7 +42,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }, {
     x: 0,
     duration: 2,
-    opacity: 2
+    opacity: 2,
+    ease: "power1.out",
   }, '0.5');
 
   /// Hero P Animation
@@ -50,6 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }, {
     duration: 1,
     opacity: 1,
-    stagger: 0.5
+    stagger: 0.5,
   }, "1");
 });
