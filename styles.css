@@ -14,7 +14,6 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 60px;
 }
 
 body {
@@ -245,17 +244,6 @@ a.nav-h1 {
   flex-direction: column;
 }
 
-.hero-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  pointer-events: none;
-}
-
 .hero-h1 {
   font-family: 'Geist', sans-serif;
   width: fit-content;
@@ -271,6 +259,8 @@ a.nav-h1 {
 .hero-name {
   margin-top: auto;
   width: 100vw;
+  -webkit-mask-image: radial-gradient(circle, transparent 0%, rgba(0, 0, 0, 0.8) 30%);
+  mask-image: radial-gradient(circle, transparent 0%, rgba(0, 0, 0, 0.8) 30%);
 }
 
 .hero-p {
@@ -304,8 +294,13 @@ a.nav-h1 {
   text-transform: capitalize;
 }
 
-.overlay-img {
-  -webkit-mask-image: radial-gradient(circle, rgba(0, 0, 0, 0.8) 0%, transparent 30%);
-  mask-image: radial-gradient(circle, rgba(0, 0, 0, 0.8) 0%, transparent 30%);
-  z-index: 2;
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  pointer-events: none;
 }
