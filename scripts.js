@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const xPos = (clientX / window.innerWidth - 0.5);
     const yPos = (clientY / window.innerHeight - 0.5);
 
-    gsap.to("#hero-face", {
+    gsap.to("#hero-img", {
       x: xPos * 10,
       y: yPos * 10,
       rotationY: xPos,
@@ -99,30 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
       scale: 1.08,
       ease: "power3.out",
       duration: 1.5
-    });
-
-    gsap.to("#hero-eye", {
-      x: xPos * 10,
-      y: yPos * 10,
-      rotationY: xPos,
-      rotationX: -yPos,
-      transformPerspective: 1000,
-      transformOrigin: "center center",
-      scale: 1.08,
-      ease: "power3.out",
-      duration: 1.5
-    });
-
-    gsap.to("#hero-iris", {
-      x: xPos * 25,
-      y: yPos * 20,
-      rotationY: xPos,
-      rotationX: -yPos,
-      transformPerspective: 1000,
-      transformOrigin: "center center",
-      scale: 1.07,
-      ease: "power3.out",
-      duration: 2
     });
   }
 
