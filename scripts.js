@@ -1,7 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const norrisLink = document.querySelectorAll("a.nav-h1");
 
-  norrisLink.forEach((link) => {
+  /// Nav H1 Animation
+
+  const Link = document.querySelectorAll("a.nav-h1");
+
+  Link.forEach((link) => {
     const text = link.textContent;
     const segmenter = new Intl.Segmenter("it", { granularity: "grapheme" });
     const chars = Array.from(segmenter.segment(text), (s) => s.segment);
@@ -10,5 +13,43 @@ document.addEventListener("DOMContentLoaded", () => {
       .join("");
   });
 
-  console.log("Norris animation loaded for ", norrisLink.length, " norrisLink");
+  /// Hero Animation
+  let tl = gsap.timeline();
+
+  /// Hero H1 Animation
+
+  tl.fromTo(".navbar", {
+    y: -100
+  }, {
+    duration: 1,
+    y: 0
+  }, "0");
+
+  tl.fromTo("#hero-h1-1", {
+    x: -200,
+    opacity: 0
+  }, {
+    x: 0,
+    duration: 2,
+    opacity: 2
+  }, '0.5');
+
+  tl.fromTo("#hero-h1-2", {
+    x: 200,
+    opacity: 0
+  }, {
+    x: 0,
+    duration: 3,
+    opacity: 2
+  }, '0.5');
+
+  /// Hero P Animation
+
+  tl.fromTo("#hero-p", {
+    opacity: 0
+  }, {
+    duration: 1,
+    opacity: 1,
+    stagger: 0.5
+  }, "1");
 });
