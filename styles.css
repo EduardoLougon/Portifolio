@@ -226,6 +226,7 @@ a.nav-h1 {
   top: 0;
   left: 0;
   z-index: -1;
+  pointer-events: none;
 }
 
 .hero-h1 {
