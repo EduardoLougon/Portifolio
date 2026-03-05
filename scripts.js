@@ -1,4 +1,20 @@
+import Lenis from "https://esm.sh/lenis";
+import gsap from "https://esm.sh/gsap";
+import ScrollTrigger from "https://esm.sh/gsap/ScrollTrigger";
+
 document.addEventListener("DOMContentLoaded", () => {
+
+  /// Scroll
+  gsap.registerPlugin(ScrollTrigger);
+
+  const lenis = new Lenis();
+  lenis.on("scroll", ScrollTrigger.update);
+  gsap.ticker.add((time) => {
+    lenis.raf(time * 1000);
+  });
+  gsap.ticker.lagSmoothing(0);
+
+
 
   /// Nav H1 Animation
 

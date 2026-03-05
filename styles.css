@@ -25,6 +25,14 @@ body {
   overflow-x: hidden;
 }
 
+body::-webkit-scrollbar-track {
+  background: #003E52;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #c3ff9c;
+}
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
