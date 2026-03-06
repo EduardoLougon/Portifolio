@@ -2,6 +2,9 @@ import Lenis from "https://esm.sh/lenis";
 import gsap from "https://esm.sh/gsap";
 import ScrollTrigger from "https://esm.sh/gsap/ScrollTrigger";
 
+let cursosOffsetX = 7.5;
+let cursosOffsetY = 7.5;
+
 document.addEventListener("DOMContentLoaded", () => {
 
   /// Scroll
@@ -107,20 +110,6 @@ document.addEventListener("DOMContentLoaded", () => {
     pinSpacing: false, // This allows the next section to slide over this one
   });
 
-  const cards = gsap.utils.toArray('.project-card');
-
-  cards.forEach(card => {
-    gsap.from(card, {
-      opacity: 0,
-      duration: 0.5,
-      ease: "expo.out",
-      scrollTrigger: {
-        trigger: card,
-        start: "top 85%", // Trigger right before it fully enters view
-        toggleActions: "play none none reverse",
-      }
-    });
-  });
 
   /// Section H2 Animation
 
@@ -137,14 +126,91 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  /// Project Card Animation
+
+  gsap.fromTo(".project-card", {
+    opacity: 0,
+    y: 100,
+  }, {
+    opacity: 1,
+    y: 0,
+    duration: 1,
+    scrollTrigger: {
+      trigger: ".project-card",
+      start: "top 90%",
+      end: "bottom 50%",
+      scrub: 1,
+    }
+  });
+
+  /// Project Card Hover Animation
+
+  const projectCard = document.querySelectorAll(".project-card");
+
+  projectCard.forEach((card) => {
+    card.addEventListener("mouseenter", () => {
+      cursosOffsetX = 150;
+      cursosOffsetY = 187.5 / 2;
+      gsap.to(card.querySelector('.card-title h3'), {
+        x: 10,
+        color: "gray",
+        duration: 0.2,
+        ease: "power4.out"
+      })
+      gsap.to(card.querySelector('.card-job'), {
+        x: -10,
+        duration: 0.2,
+        ease: "power4.out"
+      })
+      const cardImage = card.dataset.image;
+      gsap.to('.cursor', {
+        backgroundImage: `url("${cardImage}")`,
+        backgroundSize: 'cover',
+        width: '300px',
+        height: '187.5px',
+        backgroundPosition: 'center',
+        borderRadius: '0',
+        mixBlendMode: 'normal',
+        duration: 0.2,
+        ease: "power4.out"
+      })
+    })
+    card.addEventListener("mouseleave", () => {
+      cursosOffsetX = 7.5;
+      cursosOffsetY = 7.5;
+      gsap.to(card.querySelector('.card-title h3'), {
+        x: 0,
+        color: "var(--primary-bg)",
+        duration: 0.2,
+        ease: "power4.out"
+      })
+      gsap.to(card.querySelector('.card-job'), {
+        x: 0,
+        duration: 0.2,
+        ease: "power4.out"
+      })
+      gsap.to('.cursor', {
+        backgroundImage: 'none',
+        backgroundSize: 'cover',
+        width: '15px',
+        height: '15px',
+        backgroundPosition: 'center',
+        borderRadius: '50%',
+        mixBlendMode: 'difference',
+        duration: 0.2,
+        ease: "power4.out"
+      })
+    })
+  })
+
 
   /// Cursor Animation
 
   const handleMouseMove = (e) => {
     const { clientX, clientY } = e
     gsap.to(".cursor", {
-      x: clientX - 7.5,
-      y: clientY - 7.5,
+      x: clientX - cursosOffsetX,
+      y: clientY - cursosOffsetY,
       duration: 1,
       delay: 0,
       ease: "power4.out"
