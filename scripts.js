@@ -14,30 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   gsap.ticker.lagSmoothing(0);
 
-
-  /// Navbar Scroll Background
-
-  const navbar = document.querySelector(".nav-container");
-  const whiteSections = document.querySelectorAll(".bg-white");
-
-  const navObserver = new IntersectionObserver((entries) => {
-    const isAnyWhiteSectionVisible = entries.some(entry => entry.isIntersecting);
-
-    if (isAnyWhiteSectionVisible) {
-      navbar.classList.add("dark");
-    } else {
-      navbar.classList.remove("dark");
-    }
-  }, {
-    threshold: 0.8,
-    rootMargin: "-80px 0px 0px 0px"
-  });
-
-  whiteSections.forEach(section => {
-    navObserver.observe(section);
-  });
-
-
   /// Nav H1 Animation
 
   const Link = document.querySelectorAll("a.nav-h1");
@@ -131,14 +107,44 @@ document.addEventListener("DOMContentLoaded", () => {
     pinSpacing: false, // This allows the next section to slide over this one
   });
 
+  const cards = gsap.utils.toArray('.project-card');
+
+  cards.forEach(card => {
+    gsap.from(card, {
+      opacity: 0,
+      duration: 0.5,
+      ease: "expo.out",
+      scrollTrigger: {
+        trigger: card,
+        start: "top 85%", // Trigger right before it fully enters view
+        toggleActions: "play none none reverse",
+      }
+    });
+  });
+
+  /// Section H2 Animation
+
+  gsap.fromTo(".section-h2", {
+    opacity: 0,
+  }, {
+    opacity: 1,
+    duration: 1,
+    scrollTrigger: {
+      trigger: ".section-h2",
+      start: "top 90%",
+      end: "bottom 50%",
+      scrub: 1,
+    }
+  });
+
 
   /// Cursor Animation
 
   const handleMouseMove = (e) => {
     const { clientX, clientY } = e
     gsap.to(".cursor", {
-      x: clientX - 10,
-      y: clientY - 10,
+      x: clientX - 7.5,
+      y: clientY - 7.5,
       duration: 1,
       delay: 0,
       ease: "power4.out"
@@ -166,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
   heroh1.forEach((hero) => {
     hero.addEventListener("mouseenter", () => {
       gsap.to(".cursor", {
-        scale: 8,
+        scale: 10,
         duration: 0.5,
         ease: "power4.out"
       })
