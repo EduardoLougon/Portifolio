@@ -304,3 +304,65 @@ a.nav-h1 {
   z-index: -1;
   pointer-events: none;
 }
+
+.fadeText {
+  font-size: clamp(40px, 4vw, 60px);
+  font-weight: 200;
+  opacity: 1;
+}
+
+.fadeTextContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.fadeTextSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100svh;
+  position: relative;
+  flex-direction: column;
+}
+
+.fadeTextSection::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 500px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+}
+
+.fadeTextSection::before {
+  position: absolute;
+  z-index: -1;
+  top: -100px;
+  width: 100%;
+  height: 100px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+  content: '';
+  filter: blur(500%);
+}
+
+.fadeTextContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.brandSlider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.brandSlider img {
+  width: clamp(100px, 15vw, 500px);
+
+}

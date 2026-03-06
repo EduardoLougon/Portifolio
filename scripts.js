@@ -73,6 +73,34 @@ document.addEventListener("DOMContentLoaded", () => {
   }, "1");
 
 
+  /// Fade Text Animation
+
+  const fadeText = document.querySelectorAll(".fadeText");
+
+  fadeText.forEach((p) => {
+    const paragraph = p.textContent;
+    const segmenter1 = new Intl.Segmenter("it", { granularity: "grapheme" });
+    const char = Array.from(segmenter1.segment(paragraph), (s) => s.segment);
+    p.innerHTML = char
+      .map((char) => `<span data-char="${char}">${char}</span>`)
+      .join("");
+  });
+
+  gsap.fromTo(".fadeText span", {
+    opacity: 0.1
+  }, {
+    duration: 2,
+    opacity: 1,
+    stagger: 0.5,
+    scrollTrigger: {
+      trigger: ".fadeTextSection",
+      start: "top 55%",   // Start when the top of the section is 80% down the viewport
+      end: "center 55%",  // End when the center of the section reaches the center of the viewport
+      scrub: 1,
+    }
+  });
+
+
   /// Cursor Animation
 
   const handleMouseMove = (e) => {
