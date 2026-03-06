@@ -21,18 +21,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const whiteSections = document.querySelectorAll(".bg-white");
 
   const navObserver = new IntersectionObserver((entries) => {
-    // Check if ANY of the white sections are currently intersecting
     const isAnyWhiteSectionVisible = entries.some(entry => entry.isIntersecting);
 
     if (isAnyWhiteSectionVisible) {
-      navbar.classList.add("scrolled");
+      navbar.classList.add("dark");
     } else {
-      navbar.classList.remove("scrolled");
+      navbar.classList.remove("dark");
     }
   }, {
-    // Trigger when at least 5% of a white section enters the viewport
-    threshold: 0.9,
-    // Add a negative top margin so the navbar changes color slightly before it physically hits the section
+    threshold: 0.8,
     rootMargin: "-80px 0px 0px 0px"
   });
 
@@ -123,6 +120,15 @@ document.addEventListener("DOMContentLoaded", () => {
       end: "center 55%",  // End when the center of the section reaches the center of the viewport
       scrub: 1,
     }
+  });
+
+
+  /// Projetos Slide Up Effect
+  ScrollTrigger.create({
+    trigger: ".fadeTextSection",
+    start: "top top",
+    pin: true,
+    pinSpacing: false, // This allows the next section to slide over this one
   });
 
 

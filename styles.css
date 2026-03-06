@@ -49,12 +49,6 @@ body::-webkit-scrollbar-thumb {
   mix-blend-mode: difference;
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-}
-
 .navbar {
   position: fixed;
   display: flex;
@@ -89,7 +83,7 @@ body::-webkit-scrollbar-thumb {
   transition: all 1s;
 }
 
-.nav-container.scrolled {
+.nav-container.dark {
   background: rgba(0, 0, 0, 1);
   transition: all 1s;
 }
@@ -179,6 +173,18 @@ a.nav-h1 {
   justify-self: center;
 }
 
+@media (max-width: 830px) {
+  .nav-links {
+    display: none;
+  }
+
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
 .nav-links a {
   font-size: clamp(1rem, 1.2vw, 1.2rem);
   text-decoration: none;
@@ -249,6 +255,7 @@ a.nav-h1 {
 
 .hero-content {
   height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -267,7 +274,7 @@ a.nav-h1 {
 
 .hero-name {
   margin-top: auto;
-  width: 100vw;
+  width: 100%;
   -webkit-mask-image: radial-gradient(circle, transparent 0%, rgba(0, 0, 0, 0.8) 30%);
   mask-image: radial-gradient(circle, transparent 0%, rgba(0, 0, 0, 0.8) 30%);
 }
@@ -279,6 +286,7 @@ a.nav-h1 {
   justify-content: space-between;
   margin-top: auto;
   margin-bottom: 0;
+  z-index: 10;
 }
 
 .hero-p-location {
@@ -315,7 +323,7 @@ a.nav-h1 {
 }
 
 .fadeText {
-  font-size: clamp(30px, 3vw, 60px);
+  font-size: clamp(20px, 3vw, 60px);
   font-weight: 200;
   opacity: 1;
 }
@@ -329,7 +337,7 @@ a.nav-h1 {
 
 .fadeTextSection {
   height: 110svh;
-  width: 100vw;
+  width: 100%;
   position: relative;
 }
 
@@ -371,7 +379,7 @@ a.nav-h1 {
 .brandSlider {
   display: flex;
   align-items: center;
-  width: 100vw;
+  width: 100%;
   overflow: hidden;
   -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
   mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
@@ -386,7 +394,7 @@ a.nav-h1 {
 }
 
 .brandSlider img {
-  height: 4vw;
+  height: 3vw;
   min-height: 40px;
   object-fit: contain;
   opacity: 0.7;
@@ -410,6 +418,21 @@ a.nav-h1 {
   width: 90vw;
   height: auto;
   opacity: 0.1;
-  /* Usually signatures as backgrounds are faint */
   z-index: -1;
 }
+
+.projetos {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  background-color: var(--primary-color);
+}
+
+.projetos-container {
+  height: 100vh;
+  width: 1140px;
+  margin: 0 auto;
+}
+
+.
