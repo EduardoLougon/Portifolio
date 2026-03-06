@@ -15,6 +15,31 @@ document.addEventListener("DOMContentLoaded", () => {
   gsap.ticker.lagSmoothing(0);
 
 
+  /// Navbar Scroll Background
+
+  const navbar = document.querySelector(".nav-container");
+  const whiteSections = document.querySelectorAll(".bg-white");
+
+  const navObserver = new IntersectionObserver((entries) => {
+    // Check if ANY of the white sections are currently intersecting
+    const isAnyWhiteSectionVisible = entries.some(entry => entry.isIntersecting);
+
+    if (isAnyWhiteSectionVisible) {
+      navbar.classList.add("scrolled");
+    } else {
+      navbar.classList.remove("scrolled");
+    }
+  }, {
+    // Trigger when at least 5% of a white section enters the viewport
+    threshold: 0.9,
+    // Add a negative top margin so the navbar changes color slightly before it physically hits the section
+    rootMargin: "-80px 0px 0px 0px"
+  });
+
+  whiteSections.forEach(section => {
+    navObserver.observe(section);
+  });
+
 
   /// Nav H1 Animation
 
