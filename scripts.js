@@ -1,6 +1,7 @@
 import Lenis from "https://esm.sh/lenis";
 import gsap from "https://esm.sh/gsap";
 import ScrollTrigger from "https://esm.sh/gsap/ScrollTrigger";
+import MorphSVGPlugin from "https://esm.sh/gsap/MorphSVGPlugin";
 
 let cursosOffsetX = 7.5;
 let cursosOffsetY = 7.5;
@@ -8,7 +9,7 @@ let cursosOffsetY = 7.5;
 document.addEventListener("DOMContentLoaded", () => {
 
   /// Scroll
-  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger, MorphSVGPlugin);
 
   const lenis = new Lenis();
   lenis.on("scroll", ScrollTrigger.update);
@@ -113,13 +114,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /// Section H2 Animation
 
-  gsap.fromTo(".section-h2", {
+  gsap.fromTo("#projetos-h2", {
     opacity: 0,
   }, {
     opacity: 1,
     duration: 1,
     scrollTrigger: {
-      trigger: ".section-h2",
+      trigger: "#projetos-h2",
       start: "top 90%",
       end: "bottom 50%",
       scrub: 1,
@@ -203,6 +204,40 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   })
 
+
+  /// Box Select + Competências H2 Animation
+
+  const compH2 = document.querySelector('#competencias-h2');
+  const compText = compH2.textContent;
+  const compSegmenter = new Intl.Segmenter("pt", { granularity: "grapheme" });
+  const compChars = Array.from(compSegmenter.segment(compText), (s) => s.segment);
+  compH2.innerHTML = compChars
+    .map((char) => `<span>${char}</span>`)
+    .join("");
+
+  let competenciasTL = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".competencias-header",
+      start: "top 90%",
+      toggleActions: "play none none reverse",
+    }
+  });
+
+  // 1. Box morph opens
+  competenciasTL.to('#closeBox', {
+    morphSVG: '#openBox',
+    duration: 1,
+    ease: "power4.out",
+  });
+
+  // 2. Then typewriter reveals
+  competenciasTL.fromTo('#competencias-h2 span', {
+    opacity: 0,
+  }, {
+    opacity: 1,
+    duration: 0.05,
+    stagger: 0.04,
+  });
 
   /// Cursor Animation
 

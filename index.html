@@ -19,7 +19,7 @@
       <a class="nav-h1" href="#hero">Eduardo Lougon</a>
       <div class="nav-links">
         <a href="#projetos">Projetos</a>
-        <a href="#habilidades">Habilidades</a>
+        <a href="#competencias">Competências</a>
         <a href="#feedback">Feedbacks</a>
         <a href="#contato">Sobre Mim</a>
       </div>
@@ -92,7 +92,7 @@
 
   <section id="projetos" class="projetos bg-white">
     <div class="projetos-container">
-      <h2 class="section-h2 text-black"><span class="highlight">Projetos</span></h2>
+      <h2 id="projetos-h2" class="section-h2 text-black"><span class="highlight">Projetos</span></h2>
       <div class="project-grid">
         <a href="https://olympiads.dev/" target="_blank" class="project-card" data-image="Images/OlympiadsImage.webp">
           <div class="card-title">
@@ -160,8 +160,21 @@
     </div>
   </section>
 
-  <section style="height: 100vh;">
-    <img style="margin-top: -1px; width: 100%; display: block;" src="Images/curve.svg" alt="">
+  <section id='competencias' style="height: 100vh; background-color: #242424;">
+    <img style="margin-top: -1px; width: 100%; display: block;" src="Images/curve.svg" alt="" draggable="false">
+    <div class="competencias-container">
+      <div class="competencias-header">
+        <h2 id="competencias-h2" class="section-h2">Competências</h2>
+        <svg class='boxSelect' viewBox="-0.15 4.7 84.8 17.6" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path id='openBox'
+            d="M1.1499 20H2.1499V21M1.1499 20H0.149902V22H2.1499V21M1.1499 20V7M2.1499 21H82.1499M83.1499 20H82.1499V21M83.1499 20H84.1499V22H82.1499V21M83.1499 20V7M82.1499 6V5H84.1499V7H83.1499M82.1499 6V7H83.1499M82.1499 6H2.1499M1.1499 7H2.1499V6M1.1499 7H0.149902V5H2.1499V6"
+            stroke="#C3FF9C" stroke-width="0.3" visibility="hidden" />
+          <path id='closeBox'
+            d="M1.1499 8H2.1499V9M1.1499 8H0.149902V10H2.1499V9M1.1499 8V7M2.1499 9H3.1499M4.1499 8H3.1499V9M4.1499 8H5.1499V10H3.1499V9M4.1499 8V7M3.1499 6V5H5.1499V7H4.1499M3.1499 6V7H4.1499M3.1499 6H2.1499M1.1499 7H2.1499V6M1.1499 7H0.149902V5H2.1499V6"
+            stroke="#C3FF9C" stroke-width="0.3" />
+        </svg>
+      </div>
+    </div>
   </section>
 
   <script type="module" src="scripts.js"></script>

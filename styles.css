@@ -455,7 +455,7 @@ a.nav-h1 {
 }
 
 .section-h2 {
-  font-size: clamp(3rem, 3vw, 4rem);
+  font-size: clamp(2rem, 3vw, 4rem);
   font-weight: 900;
   text-transform: uppercase;
   text-wrap: nowrap;
@@ -563,4 +563,29 @@ a.nav-h1 {
   background-color: var(--accent-color);
   z-index: 100;
   transform: skewX(-15deg);
+}
+
+.competencias-header {
+  position: relative;
+  z-index: 10;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+#competencias-h2 {
+  margin-bottom: 0;
+}
+
+#competencias-h2 span {
+  opacity: 0;
+}
+
+.boxSelect {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% + 2rem);
+  height: auto;
+  z-index: -1;
 }
