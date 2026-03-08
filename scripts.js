@@ -2,6 +2,7 @@ import Lenis from "https://esm.sh/lenis";
 import gsap from "https://esm.sh/gsap";
 import ScrollTrigger from "https://esm.sh/gsap/ScrollTrigger";
 import MorphSVGPlugin from "https://esm.sh/gsap/MorphSVGPlugin";
+import Draggable from "https://esm.sh/gsap/Draggable";
 
 let cursosOffsetX = 7.5;
 let cursosOffsetY = 7.5;
@@ -9,7 +10,7 @@ let cursosOffsetY = 7.5;
 document.addEventListener("DOMContentLoaded", () => {
 
   /// Scroll
-  gsap.registerPlugin(ScrollTrigger, MorphSVGPlugin);
+  gsap.registerPlugin(ScrollTrigger, MorphSVGPlugin, Draggable);
 
   const lenis = new Lenis();
   lenis.on("scroll", ScrollTrigger.update);
@@ -239,76 +240,38 @@ document.addEventListener("DOMContentLoaded", () => {
     stagger: 0.04,
   });
 
+  /// Draggable Post It
 
-  /// Competencias Grid
+  Draggable.create('.postit', {
+    bounds: '.competencias-area',
+  })
 
-  document.getElementById("competencias-grid").onmousemove = e => {
-    for (const card of document.getElementsByClassName("competencias-card")) {
-      const rect = card.getBoundingClientRect(),
-        x = e.clientX - rect.left,
-        y = e.clientY - rect.top;
-
-      card.style.setProperty("--mouse-x", `${x}px`);
-      card.style.setProperty("--mouse-y", `${y}px`);
-    };
-  }
+  Draggable.create('.tech', {
+    bounds: '.competencias-area',
+  })
 
   /// Competencias Cursor Animations
 
-  const cursors = document.querySelectorAll(".competencias-cursor");
+  // DevCursor — wanders around the top-left / center area
+  gsap.timeline({ repeat: -1, yoyo: true, delay: 0 })
+    .to('#devCursor', { x: 100, y: -30, duration: 4, ease: "none" })
+    .to('#devCursor', { x: 50, y: -70, duration: 3, ease: "none" })
+    .to('#devCursor', { x: 160, y: 20, duration: 3.5, ease: "none" })
+    .to('#devCursor', { x: 20, y: -10, duration: 2.5, ease: "none" });
 
-  // Cursor 1 (Dev — Card 1, large card spanning rows 1-4, cols 1-3)
-  // Wanders along the right and bottom edges, dipping in briefly
-  if (cursors[0]) {
-    gsap.set(cursors[0], { x: 350, y: -30 });
-    gsap.timeline({ repeat: -1, defaults: { ease: "none" } })
-      .to(cursors[0], { x: 420, y: 80, duration: 5 })
-      .to(cursors[0], { x: 300, y: 200, duration: 4.5 })
-      .to(cursors[0], { x: 150, y: 250, duration: 4 })
-      .to(cursors[0], { x: -40, y: 180, duration: 5 })
-      .to(cursors[0], { x: -30, y: 50, duration: 4 })
-      .to(cursors[0], { x: 100, y: -40, duration: 3.5 })
-      .to(cursors[0], { x: 350, y: -30, duration: 4 });
-  }
+  // ClienteCursor — wanders around the top-right area
+  gsap.timeline({ repeat: -1, yoyo: true, delay: 2 })
+    .to('#clienteCursor', { x: 100, y: -30, duration: 4, ease: "none" })
+    .to('#clienteCursor', { x: 50, y: -70, duration: 3, ease: "none" })
+    .to('#clienteCursor', { x: 160, y: 20, duration: 3.5, ease: "none" })
+    .to('#clienteCursor', { x: 20, y: -10, duration: 2.5, ease: "none" });
 
-  // Cursor 2 (Designer — Card 2, rows 1-2, cols 4-5)
-  // Quick, precise loops around the outside edges
-  if (cursors[1]) {
-    gsap.set(cursors[1], { x: -40, y: 30 });
-    gsap.timeline({ repeat: -1, defaults: { ease: "none" } })
-      .to(cursors[1], { x: 60, y: -25, duration: 2.5 })
-      .to(cursors[1], { x: 180, y: -20, duration: 2 })
-      .to(cursors[1], { x: 200, y: 60, duration: 2.5 })
-      .to(cursors[1], { x: 150, y: 120, duration: 2 })
-      .to(cursors[1], { x: 30, y: 110, duration: 2.5 })
-      .to(cursors[1], { x: -40, y: 30, duration: 2.5 });
-  }
-
-  // Cursor 3 (Cliente — Card 4, rows 5-6, cols 3-5)
-  // Slow, hesitant drift along the top and left edges
-  if (cursors[2]) {
-    gsap.set(cursors[2], { x: 50, y: -30 });
-    gsap.timeline({ repeat: -1, defaults: { ease: "none" } })
-      .to(cursors[2], { x: 200, y: -35, duration: 6 })
-      .to(cursors[2], { x: 280, y: 30, duration: 5 })
-      .to(cursors[2], { x: 250, y: 100, duration: 5.5 })
-      .to(cursors[2], { x: 80, y: 110, duration: 6 })
-      .to(cursors[2], { x: -30, y: 50, duration: 5 })
-      .to(cursors[2], { x: 50, y: -30, duration: 5.5 });
-  }
-
-  // Cursor 4 (Eduardo — Card 5, row 5, cols 1-2)
-  // Energetic bouncing around the perimeter
-  if (cursors[3]) {
-    gsap.set(cursors[3], { x: 120, y: -25 });
-    gsap.timeline({ repeat: -1, defaults: { ease: "none" } })
-      .to(cursors[3], { x: 180, y: 20, duration: 2.5 })
-      .to(cursors[3], { x: 160, y: 70, duration: 2 })
-      .to(cursors[3], { x: 40, y: 80, duration: 3 })
-      .to(cursors[3], { x: -30, y: 30, duration: 2.5 })
-      .to(cursors[3], { x: 20, y: -30, duration: 2 })
-      .to(cursors[3], { x: 120, y: -25, duration: 2.5 });
-  }
+  // EduardoCursor — wanders around the bottom-left area
+  gsap.timeline({ repeat: -1, yoyo: true, delay: 4.5 })
+    .to('#eduardoCursor', { x: 100, y: -30, duration: 4, ease: "none" })
+    .to('#eduardoCursor', { x: 50, y: -70, duration: 3, ease: "none" })
+    .to('#eduardoCursor', { x: 160, y: 20, duration: 3.5, ease: "none" })
+    .to('#eduardoCursor', { x: 20, y: -10, duration: 2.5, ease: "none" });
 
   /// Cursor Animation
 

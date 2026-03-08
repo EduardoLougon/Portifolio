@@ -44,7 +44,7 @@ body::-webkit-scrollbar-thumb {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 999;
+  z-index: 9999;
   pointer-events: none;
   mix-blend-mode: difference;
 }
@@ -57,7 +57,7 @@ body::-webkit-scrollbar-thumb {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000;
+  z-index: 10000;
   padding: 1rem;
 }
 
@@ -600,174 +600,212 @@ a.nav-h1 {
   z-index: -1;
 }
 
-.competencias-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(6, 1fr);
-  gap: 1rem;
-  height: 900px;
-  max-width: 1200px;
-  margin: 4rem auto 0 auto;
-}
-
-.competencias-card {
+.competencias-area {
+  min-height: 100svh;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  background-color: rgba(255, 255, 255, 0.1);
   width: 100%;
-  height: 100%;
-  border-radius: 20px;
-  transition: box-shadow 0.3s;
-  box-shadow: none;
+  margin-top: 4rem;
   position: relative;
+  overflow: hidden;
 }
 
-.competencias-card:hover {
-  box-shadow: 15px 15px 30px #17181d,
-    -15px -15px 30px #282931;
-  transition: box-shadow 0.3s;
-}
-
-.competencias-grid:hover>.competencias-card:hover {
-  opacity: 1;
-}
-
-.competencias-card:hover::after {
-  opacity: 1;
-}
-
-.competencias-card::before,
-.competencias-card::after {
-  border-radius: inherit;
-  content: "";
-  height: 100%;
-  left: 0px;
-  opacity: 0;
+.competencias-cursor {
   position: absolute;
-  top: 0px;
-  transition: opacity 500ms;
-  width: 100%;
-}
-
-.competencias-card::after {
-  background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y),
-      var(--glow-color),
-      transparent 40%);
-  z-index: 1;
-}
-
-.inner {
-  width: calc(100% - 2px);
-  height: calc(100% - 2px);
-  background-color: #2a2c35;
-  border-radius: 19px;
-  z-index: 2;
-}
-
-#competencias-card1 {
-  grid-area: 1 / 1 / 5 / 4;
-  --glow-color: #c3ff9c;
-  /* green */
-}
-
-#competencias-card2 {
-  grid-area: 1 / 4 / 3 / 6;
-  --glow-color: #9cf0ff;
-  /* cyan */
-}
-
-#competencias-card3 {
-  grid-area: 3 / 4 / 5 / 6;
-  --glow-color: #ffd89c;
-  /* pink */
-}
-
-#competencias-card4 {
-  grid-area: 5 / 3 / 7 / 6;
-  --glow-color: #ff9cda;
-  /* amber */
-}
-
-#competencias-card5 {
-  grid-area: 5 / 1 / 6 / 3;
-  --glow-color: #907CFF;
-  /* purple */
-}
-
-#competencias-card6 {
-  grid-area: 6 / 1 / 7 / 3;
-  --glow-color: #9cbbff;
-  /* blue */
+  width: 120px;
+  pointer-events: none;
+  z-index: 5;
 }
 
 @media (max-width: 830px) {
-  .competencias-grid {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(6, 1fr);
-  }
-
-  /* Card 1 — largest, spans both columns and 2 rows */
-  #competencias-card1 {
-    grid-area: 1 / 1 / 3 / 3;
-  }
-
-  /* Cards 2 & 3 — side by side, 1 row each */
-  #competencias-card2 {
-    grid-area: 3 / 1 / 4 / 2;
-  }
-
-  #competencias-card3 {
-    grid-area: 3 / 2 / 4 / 3;
-  }
-
-  /* Card 4 — spans both columns, 2 rows */
-  #competencias-card4 {
-    grid-area: 4 / 1 / 6 / 3;
-  }
-
-  /* Cards 5 & 6 — side by side */
-  #competencias-card5 {
-    grid-area: 6 / 1 / 7 / 2;
-  }
-
-  #competencias-card6 {
-    grid-area: 6 / 2 / 7 / 3;
-  }
-
   .competencias-cursor {
     display: none;
   }
 }
 
-.competencias-cursor {
-  position: absolute;
-  width: 112px;
-  z-index: 10;
+/* DevCursor — top-left area */
+.competencias-cursor:nth-child(1) {
+  top: 12%;
+  right: 10%;
+}
+
+/* ClienteCursor — top-right area */
+.competencias-cursor:nth-child(2) {
+  top: 8%;
+  left: 5%;
+}
+
+/* EduardoCursor — bottom-left area */
+.competencias-cursor:nth-child(3) {
+  bottom: 15%;
+  left: 5%;
+}
+
+.postit-container {
+  display: flex;
+  gap: 3rem;
+}
+
+@media (max-width: 1000px) {
+  .postit-container {
+    flex-direction: column;
+  }
+}
+
+.postit {
+  width: 300px;
+  height: 300px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 60px 40px -7px;
+  position: relative;
+  padding: calc(50px + 1rem) 1rem 1rem 1rem;
+  color: var(--primary-bg);
+  display: flex;
+  flex-direction: column;
   pointer-events: none;
-  filter: drop-shadow(0 0 0.75rem #1C1D23)
 }
 
-/* Dev cursor — top-left */
-#competencias-card1 .competencias-cursor {
+.postit::before {
+  content: '';
+  position: absolute;
   top: 0;
   left: 0;
+  width: 300px;
+  height: 50px;
+  background-color: rgba(0, 0, 0, 0.1);
+  pointer-events: all;
+  cursor: grab;
 }
 
-/* Designer cursor — bottom-right */
-#competencias-card2 .competencias-cursor {
-  bottom: 0;
-  left: 0;
+.postit h2 {
+  font-size: 3rem;
+  margin: 0;
+  opacity: 0.8;
 }
 
-/* Cliente cursor — top-right */
-#competencias-card4 .competencias-cursor {
-  top: 0;
-  left: 0;
+.postit h3 {
+  font-size: 1.5rem;
+  margin: 0;
+  opacity: 0.8;
 }
 
-/* Eduardo cursor — bottom-left */
-#competencias-card5 .competencias-cursor {
-  bottom: 0;
-  left: 0;
+.postit p {
+  margin: auto 0 0 0;
+  opacity: 0.8;
+  text-wrap: balance;
+}
+
+.techstack {
+  max-width: 1200px;
+  width: 100%;
+  height: 500px;
+  margin-top: 4rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#tech-h1 {
+  background-color: transparent;
+  border: 2px solid transparent;
+  font-size: clamp(4rem, 6vw, 6rem);
+  outline: none;
+  color: white;
+  field-sizing: content;
+  padding: 0 10px;
+  position: relative;
+  z-index: 2;
+}
+
+#tech-h1:hover,
+#tech-h1:focus {
+  border: solid 2px #c3ff9c;
+}
+
+.tech {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  position: absolute;
+  z-index: 1;
+  white-space: nowrap;
+  border: transparent solid 2px;
+}
+
+.tech:hover {
+  border: #c3ff9c solid 2px;
+}
+
+.tech:hover {
+  visibility: visible;
+}
+
+/* Scattered positions around the center title */
+.tech:nth-child(2) {
+  /* React */
+  top: 5%;
+  left: 10%;
+  rotate: -6deg;
+}
+
+.tech:nth-child(3) {
+  /* Django */
+  top: 0%;
+  right: 15%;
+  rotate: 4deg;
+}
+
+.tech:nth-child(4) {
+  /* HTML */
+  top: 35%;
+  right: 3%;
+  rotate: -3deg;
+}
+
+.tech:nth-child(5) {
+  /* CSS */
+  bottom: 10%;
+  right: 8%;
+  rotate: 5deg;
+}
+
+.tech:nth-child(6) {
+  /* Python */
+  bottom: 5%;
+  right: 30%;
+  rotate: -4deg;
+}
+
+.tech:nth-child(7) {
+  /* TypeScript */
+  bottom: 8%;
+  left: 15%;
+  rotate: 3deg;
+}
+
+.tech:nth-child(8) {
+  /* JavaScript */
+  top: 38%;
+  left: 2%;
+  rotate: -5deg;
+}
+
+.tech:nth-child(9) {
+  /* PostgreSQL */
+  top: 8%;
+  left: 35%;
+  rotate: 2deg;
+}
+
+.tech-name {
+  font-size: 2rem;
+}
+
+.tech-icon {
+  width: 2.5rem;
+  filter: brightness(1000%);
 }

@@ -19,7 +19,7 @@
       <a class="nav-h1" href="#hero">Eduardo Lougon</a>
       <div class="nav-links">
         <a href="#projetos">Projetos</a>
-        <a href="#competencias">Competências</a>
+        <a href="#competencias">Habilidades</a>
         <a href="#feedback">Feedbacks</a>
         <a href="#contato">Sobre Mim</a>
       </div>
@@ -49,7 +49,7 @@
         </div>
         <div id='hero-p' class="hero-p-jobs">
           <p>UI / UX Designer</p>
-          <p>Systems & AI Developer</p>
+          <p>FullStack Developer</p>
         </div>
 
       </div>
@@ -100,7 +100,7 @@
             <h3>O(lympiads)</h3>
           </div>
           <div class="card-job">
-            <h4>UI/UX Design & Development</h4>
+            <h4>UI/UX Design & FullStack Dev.</h4>
             <div class="card-tech">
               <img src="Images/ReactLogo.svg" alt="">
               <img src="Images/DjangoLogo.svg" alt="">
@@ -116,7 +116,7 @@
             <h3>PetHero</h3>
           </div>
           <div class="card-job">
-            <h4>UI/UX Design</h4>
+            <h4>UI/UX Design & Frontend Dev.</h4>
             <div class="card-tech">
               <img src="Images/HtmlLogo.svg" alt="">
               <img src="Images/CssLogo.svg" alt="">
@@ -132,7 +132,7 @@
             <h3>Spin</h3>
           </div>
           <div class="card-job">
-            <h4>UI/UX Design</h4>
+            <h4>UI/UX Design & Frontend Dev.</h4>
             <div class="card-tech">
               <img src="Images/HtmlLogo.svg" alt="">
               <img src="Images/CssLogo.svg" alt="">
@@ -147,7 +147,7 @@
             <h3>Poucher</h3>
           </div>
           <div class="card-job">
-            <h4>UI/UX Design</h4>
+            <h4>UI/UX Design & Frontend Dev.</h4>
             <div class="card-tech">
               <img src="Images/HtmlLogo.svg" alt="">
               <img src="Images/CssLogo.svg" alt="">
@@ -164,7 +164,7 @@
     <img style="margin-top: -1px; width: 100%;" src="Images/curve.svg" alt="" draggable="false">
     <div class="competencias-container">
       <div class="competencias-header">
-        <h2 id="competencias-h2" class="section-h2">Competências</h2>
+        <h2 id="competencias-h2" class="section-h2">HABILIDADES</h2>
         <svg class='boxSelect' viewBox="-0.15 4.7 84.8 17.6" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path id='openBox'
             d="M1.1499 20H2.1499V21M1.1499 20H0.149902V22H2.1499V21M1.1499 20V7M2.1499 21H82.1499M83.1499 20H82.1499V21M83.1499 20H84.1499V22H82.1499V21M83.1499 20V7M82.1499 6V5H84.1499V7H83.1499M82.1499 6V7H83.1499M82.1499 6H2.1499M1.1499 7H2.1499V6M1.1499 7H0.149902V5H2.1499V6"
@@ -174,29 +174,63 @@
             stroke="#C3FF9C" stroke-width="0.3" />
         </svg>
       </div>
-      <div id='competencias-grid' class="competencias-grid">
-        <div id='competencias-card1' class="competencias-card">
-          <div class="inner"></div>
-          <img class='competencias-cursor' src="Images/DevCursor.svg" alt="">
+      <div class="competencias-area">
+        <img class='competencias-cursor' id='devCursor' src="Images/DevCursor.svg" alt="">
+        <img class='competencias-cursor' id='clienteCursor' src="Images/ClienteCursor.svg" alt="">
+        <img class='competencias-cursor' id='eduardoCursor' src="Images/EduardoCursor.svg" alt="">
+        <div class="postit-container">
+          <div style='background-color: var(--accent-color);' class='postit'>
+            <h2>FullStack</h2>
+            <h3>Development</h3>
+            <p>Desenvolvimento completo com integrações de sistemas e IA</p>
+          </div>
+          <div style='background-color: #189FF9;' class='postit'>
+            <h2>UI/UX</h2>
+            <h3>Design</h3>
+            <p>Interfaces claras, intuitivas e funcionais</p>
+          </div>
+          <div style='background-color: #EE46D3;' class='postit'>
+            <h2>Digital</h2>
+            <h3>Strategy</h3>
+            <p>Estratégia digital focada em crescimento</p>
+          </div>
         </div>
-        <div id='competencias-card2' class="competencias-card">
-          <div class="inner"></div>
-          <img class='competencias-cursor' src="Images/DesignerCursor.svg" alt="">
+        <div class="techstack">
+          <input id='tech-h1' maxlength="10" value='Tech Stack' type="text" />
+          <div class="tech" style="background-color: #5ED3F3;">
+            <img class='tech-icon' src="Images/ReactLogo.svg" alt="">
+            <h1 class="tech-name">React</h1>
+          </div>
+          <div class="tech" style="background-color: #092D1F;">
+            <img class='tech-icon' src="Images/DjangoLogo.svg" alt="">
+            <h1 class="tech-name">Django</h1>
+          </div>
+          <div class="tech" style="background-color: #F74814;">
+            <img class='tech-icon' src="Images/HtmlLogo.svg" alt="">
+            <h1 class="tech-name">HTML</h1>
+          </div>
+          <div class="tech" style="background-color: #2091EB;">
+            <img class='tech-icon' src="Images/CssLogo.svg" alt="">
+            <h1 class="tech-name">CSS</h1>
+          </div>
+          <div class="tech" style="background-color: #F7CC40;">
+            <img class='tech-icon' src="Images/PythonLogo.svg" alt="">
+            <h1 class="tech-name">Python</h1>
+          </div>
+          <div class="tech" style="background-color: #2F74C0;">
+            <img class='tech-icon' src="Images/TypeScriptLogo.svg" alt="">
+            <h1 class="tech-name">TypeScript</h1>
+          </div>
+          <div class="tech" style="background-color: #E8D34D;">
+            <img class='tech-icon' src="Images/JavaScriptLogo.svg" alt="">
+            <h1 class="tech-name">JavaScript</h1>
+          </div>
+          <div class="tech" style="background-color: #2F5E8D;">
+            <img class='tech-icon' src="Images/PostgresLogo.svg" alt="">
+            <h1 class="tech-name">PostgreSQL</h1>
+          </div>
         </div>
-        <div id='competencias-card3' class="competencias-card">
-          <div class="inner"></div>
-        </div>
-        <div id='competencias-card4' class="competencias-card">
-          <div class="inner"></div>
-          <img class='competencias-cursor' src="Images/ClienteCursor.svg" alt="">
-        </div>
-        <div id='competencias-card5' class="competencias-card">
-          <div class="inner"></div>
-          <img class='competencias-cursor' src="Images/EduardoCursor.svg" alt="">
-        </div>
-        <div id='competencias-card6' class="competencias-card">
-          <div class="inner"></div>
-        </div>
+
       </div>
     </div>
   </section>
