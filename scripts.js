@@ -1,8 +1,10 @@
 import Lenis from "https://esm.sh/lenis";
 import gsap from "https://esm.sh/gsap";
 import ScrollTrigger from "https://esm.sh/gsap/ScrollTrigger";
+import ScrollToPlugin from "https://esm.sh/gsap/ScrollToPlugin";
 import MorphSVGPlugin from "https://esm.sh/gsap/MorphSVGPlugin";
 import Draggable from "https://esm.sh/gsap/Draggable";
+import DrawSVGPlugin from "https://esm.sh/gsap/DrawSVGPlugin";
 
 let cursosOffsetX = 7.5;
 let cursosOffsetY = 7.5;
@@ -10,14 +12,56 @@ let cursosOffsetY = 7.5;
 document.addEventListener("DOMContentLoaded", () => {
 
   /// Scroll
-  gsap.registerPlugin(ScrollTrigger, MorphSVGPlugin, Draggable);
+  gsap.registerPlugin(ScrollTrigger, MorphSVGPlugin, Draggable, ScrollToPlugin, DrawSVGPlugin);
 
-  const lenis = new Lenis();
-  lenis.on("scroll", ScrollTrigger.update);
-  gsap.ticker.add((time) => {
-    lenis.raf(time * 1000);
+  const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    orientation: 'vertical',
+    gestureOrientation: 'vertical',
+    smoothWheel: true,
+    wheelMultiplier: 1,
+    smoothTouch: false,
+    touchMultiplier: 2,
+    infinite: false,
+  })
+
+  function raf(time) {
+    lenis.raf(time)
+    requestAnimationFrame(raf)
+  }
+
+  requestAnimationFrame(raf)
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+
+      const targetId = this.getAttribute('href');
+      if (targetId === '#') return;
+
+      const target = document.querySelector(targetId);
+      if (target) {
+        // If the target has a ScrollTrigger attached, get its calculated start position
+        // This is crucial for pinned elements, as Lenis doesn't know about GSAP's pin-spacers
+        let targetY = target;
+        let triggers = ScrollTrigger.getAll();
+        for (let i = 0; i < triggers.length; i++) {
+          if (triggers[i].trigger === target) {
+            targetY = triggers[i].start;
+            break;
+          }
+        }
+
+        lenis.scrollTo(targetY, {
+          duration: 1.5,
+          offset: 0,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+        });
+      }
+    });
   });
-  gsap.ticker.lagSmoothing(0);
 
   /// Nav H1 Animation
 
@@ -272,6 +316,55 @@ document.addEventListener("DOMContentLoaded", () => {
     .to('#eduardoCursor', { x: 50, y: -70, duration: 3, ease: "none" })
     .to('#eduardoCursor', { x: 160, y: 20, duration: 3.5, ease: "none" })
     .to('#eduardoCursor', { x: 20, y: -10, duration: 2.5, ease: "none" });
+
+
+  /// Diagonal Wipe — DrawSVG painted effect over competencias
+
+  gsap.set('#wipePath', { drawSVG: '0%' });
+  const headers = document.querySelectorAll('.sobre-mim-header')
+
+  let wipeTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '#competencias',
+      start: 'bottom bottom',
+      end: '+=400%',
+      scrub: 1.5,
+      pin: true,
+    }
+  });
+
+  wipeTl.to('#wipePath', {
+    drawSVG: '100%',
+    duration: 1.5,
+    ease: "power1.inOut"
+  })
+    .to(headers[0], { x: `${100 - self.progress * 100}%` })
+    .to(headers[1], { x: `${-100 + self.progress * 100}%` })
+    .to(headers[2], { x: `${100 - self.progress * 100}%` })
+
+    .to(headers[0], { y: '100%' })
+    .to(headers[2], { y: '-100%' }, '<')
+
+
+  /// Sobre Mim — Horizontal Scroll
+
+  let sobreWrapper = document.querySelector('.sobre-wrapper');
+  let sobrePanels = gsap.utils.toArray('.sobre-panel');
+
+  if (sobreWrapper && sobrePanels.length > 1) {
+    gsap.to(sobreWrapper, {
+      x: () => -(sobreWrapper.scrollWidth - window.innerWidth),
+      ease: "none",
+      scrollTrigger: {
+        trigger: '.sobre-mim',
+        start: 'top top',
+        end: () => '+=' + (sobreWrapper.scrollWidth - window.innerWidth),
+        scrub: 1,
+        pin: true,
+        invalidateOnRefresh: true,
+      }
+    });
+  }
 
   /// Cursor Animation
 
