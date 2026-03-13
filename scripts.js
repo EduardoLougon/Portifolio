@@ -366,6 +366,24 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  /// Logo Remover
+
+  const interval = setInterval(() => {
+    const viewer = document.querySelector('spline-viewer');
+    if (viewer && viewer.shadowRoot) {
+      const logo = viewer.shadowRoot.querySelector('#logo');
+      if (logo) {
+        logo.style.display = 'none';
+        logo.style.visibility = 'hidden';
+        logo.style.opacity = '0';
+        logo.style.pointerEvents = 'none';
+        logo.style.zIndex = '-20';
+        logo.style.position = 'absolute';
+        clearInterval(interval);
+      }
+    }
+  }, 500);
+
   /// Cursor Animation
 
   const handleMouseMove = (e) => {
