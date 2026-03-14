@@ -4,6 +4,7 @@ import ScrollTrigger from "https://esm.sh/gsap/ScrollTrigger";
 import MorphSVGPlugin from "https://esm.sh/gsap/MorphSVGPlugin";
 import Draggable from "https://esm.sh/gsap/Draggable";
 import DrawSVGPlugin from "https://esm.sh/gsap/DrawSVGPlugin";
+import TextPlugin from "https://esm.sh/gsap/TextPlugin";
 
 let cursosOffsetX = 7.5;
 let cursosOffsetY = 7.5;
@@ -11,7 +12,7 @@ let cursosOffsetY = 7.5;
 document.addEventListener("DOMContentLoaded", () => {
 
   /// Scroll
-  gsap.registerPlugin(ScrollTrigger, MorphSVGPlugin, Draggable, DrawSVGPlugin);
+  gsap.registerPlugin(ScrollTrigger, MorphSVGPlugin, Draggable, DrawSVGPlugin, TextPlugin);
 
   const lenis = new Lenis({
     duration: 1.2,
@@ -43,19 +44,20 @@ document.addEventListener("DOMContentLoaded", () => {
       const target = document.querySelector(targetId);
       if (target) {
         // If the target has a ScrollTrigger attached, get its calculated start position
-        // This is crucial for pinned elements, as Lenis doesn't know about GSAP's pin-spacers
+        // This is crucial for pinned elements. We prioritize pinning triggers or those starting at exactly "top top".
         let targetY = target;
         let triggers = ScrollTrigger.getAll();
-        for (let i = 0; i < triggers.length; i++) {
-          if (triggers[i].trigger === target) {
-            targetY = triggers[i].start;
-            break;
-          }
+        
+        // Find the primary trigger for this target
+        const primaryTrigger = triggers.find(t => t.trigger === target && (t.vars.pin === true || t.vars.start === "top top"));
+        
+        if (primaryTrigger) {
+          targetY = primaryTrigger.start;
         }
 
         lenis.scrollTo(targetY, {
           duration: 1.5,
-          offset: 0,
+          offset: -80, // Offset for the fixed navbar (approx height + padding)
           easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
         });
       }
@@ -365,22 +367,238 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /// Contato Header Animation
+  /// Interactive Contact Dialogue
 
-  gsap.fromTo(".contatos-header", {
+  const dialogueText = document.getElementById("dialogue-text");
+  const choicesContainer = document.querySelector(".dialogue-choices");
+  const choicesBtns = document.querySelectorAll(".dialogue-btn");
+  const linksContainer = document.querySelector(".dialogue-links");
+  const linkBtns = document.querySelectorAll(".contact-btn");
+
+  let hasChosen = false;
+  let isLockedDown = false;
+
+  // Event listeners to only block downward scrolling
+  const preventScrollDown = (e) => {
+    if (!isLockedDown) return;
+    if (e.type === 'wheel' && e.deltaY > 0) e.preventDefault();
+    if (e.type === 'keydown' && ['ArrowDown', 'PageDown', ' '].includes(e.key)) e.preventDefault();
+  };
+
+  let touchStartY = 0;
+  const handleTouchStart = (e) => { touchStartY = e.touches[0].clientY; };
+  const preventTouchMoveDown = (e) => {
+    if (!isLockedDown) return;
+    if (touchStartY - e.touches[0].clientY > 0) e.preventDefault();
+  };
+
+  window.addEventListener('wheel', preventScrollDown, { passive: false });
+  window.addEventListener('keydown', preventScrollDown, { passive: false });
+  window.addEventListener('touchstart', handleTouchStart, { passive: false });
+  window.addEventListener('touchmove', preventTouchMoveDown, { passive: false });
+
+  // Initial animation of the speech bubble
+  gsap.fromTo(".speech-bubble", {
     opacity: 0,
-    y: 100
+    scale: 0.8,
+    y: 50
   }, {
     opacity: 1,
+    scale: 1,
     y: 0,
-    duration: 1.5,
-    ease: "power3.out",
+    duration: 1,
+    ease: "back.out(1.7)",
     scrollTrigger: {
-      trigger: ".contatos-header",
-      start: "top 60%",
+      trigger: "#contato",
+      start: "top 75%",
       toggleActions: "play none none reverse"
     }
   });
+
+  // Pin the section and scrub the text
+  let contactTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: "#contato",
+      start: "top top",
+      end: "+=250%",
+      scrub: 1,
+      pin: true,
+      onUpdate: (self) => {
+        // Lock scroll DOWN if we reached the end of the text and haven't chosen yet
+        if (self.progress >= 0.995 && !hasChosen) {
+          isLockedDown = true;
+          gsap.to(choicesBtns, {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            stagger: 0.1,
+            ease: "power2.out",
+            overwrite: "auto"
+          });
+        }
+
+        // Release scroll lock if the user scrolls up before choosing
+        if (self.progress < 0.99 && isLockedDown) {
+          isLockedDown = false;
+        }
+
+        // Hide choice buttons if user scrolls up before choosing
+        if (self.progress < 0.985 && !hasChosen) {
+          gsap.to(choicesBtns, {
+            opacity: 0,
+            y: 20,
+            duration: 0.3,
+            overwrite: "auto"
+          });
+        }
+
+        // Restart the "game" if the user scrolls back up after choosing
+        if (self.progress < 0.90 && hasChosen) {
+          hasChosen = false;
+          choicesContainer.style.display = "flex";
+          linksContainer.style.display = "none";
+
+          // Reset visibility states for buttons
+          gsap.set(choicesBtns, { opacity: 0, y: 20 });
+          gsap.set(linkBtns, { opacity: 0, y: 20 });
+          linkBtns.forEach(link => {
+            link.style.display = "block";
+            link.classList.remove("highlight-btn"); // Remove highlight if they go back
+          });
+
+          // Allow the scrub timeline to take back control of the text
+          gsap.killTweensOf(dialogueText);
+        }
+      }
+    }
+  });
+
+  const texts = [
+    "Opa, que bom que você chegou até aqui!",
+    "Gostou do que viu? Que tal construirmos algo incrível juntos?",
+    "Me diz uma coisa... O que te traz por aqui hoje?"
+  ];
+
+  let str1 = { p: 100 };
+  let str2_type = { p: 0 };
+  let str2_erase = { p: 100 };
+  let str3_type = { p: 0 };
+
+  // Timeline for text changes
+  contactTl.to(str1, {
+    p: 0,
+    duration: 0.5,
+    ease: "none",
+    onUpdate: () => { dialogueText.innerText = texts[0].substring(0, Math.round(texts[0].length * (str1.p / 100))); }
+  }, "+=0.2")
+    .to(str2_type, {
+      p: 100,
+      duration: 1,
+      ease: "none",
+      onUpdate: () => { dialogueText.innerText = texts[1].substring(0, Math.round(texts[1].length * (str2_type.p / 100))); }
+    })
+    .to(str2_erase, {
+      p: 0,
+      duration: 0.5,
+      ease: "none",
+      onUpdate: () => { dialogueText.innerText = texts[1].substring(0, Math.round(texts[1].length * (str2_erase.p / 100))); }
+    }, "+=0.2")
+    .to(str3_type, {
+      p: 100,
+      duration: 1,
+      ease: "none",
+      onUpdate: () => { dialogueText.innerText = texts[2].substring(0, Math.round(texts[2].length * (str3_type.p / 100))); }
+    });
+
+  // Handle choice clicks
+  choicesBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      hasChosen = true;
+      const choice = btn.getAttribute("data-choice");
+
+      gsap.to(choicesBtns, {
+        opacity: 0,
+        y: 20,
+        duration: 0.3,
+        stagger: 0.05,
+        onComplete: () => {
+          choicesContainer.style.display = "none";
+          linksContainer.style.display = "flex";
+
+          let responseText = "";
+          let wppMessage = "";
+
+          if (choice === "A") {
+            responseText = "Incrível! Vamos tirar essa ideia do papel. A forma mais rápida de falarmos sobre isso é pelo WhatsApp. Me chama lá!";
+            wppMessage = "Olá Eduardo, vi seu portfólio e tenho um projeto em mente para conversarmos!";
+          } else if (choice === "B") {
+            responseText = "Fico lisonjeado! Estou sempre aberto a grandes desafios e equipes inovadoras. O LinkedIn é o melhor lugar para trocarmos uma ideia.";
+            wppMessage = "Olá Eduardo, estava olhando seu portfólio e gostaria de conversar sobre uma oportunidade na minha equipe.";
+          } else {
+            responseText = "Muito obrigado! Fico feliz que tenha curtido. Sinta-se à vontade para se conectar comigo no LinkedIn para acompanharmos o trabalho um do outro!";
+            wppMessage = "Fala Eduardo! Passando só para dizer que curti muito o seu portfólio. Parabéns!";
+          }
+
+          linkBtns.forEach(link => {
+            // All buttons remain visible, just remove old highlights
+            link.classList.remove("highlight-btn");
+
+            // Apply highlight to the recommended button
+            if (choice === "A" && link.classList.contains("whatsapp-btn")) link.classList.add("highlight-btn");
+            if (choice === "B" && link.classList.contains("linkedin-btn")) link.classList.add("highlight-btn");
+            if (choice === "C" && link.classList.contains("linkedin-btn")) link.classList.add("highlight-btn"); // Alternatively, maybe highlight nothing for just saying hi, but LinkedIn works as you mentioned it in text
+
+            // Update WhatsApp href with custom message
+            if (link.classList.contains("whatsapp-btn")) {
+              link.href = `https://wa.me/5521986076148?text=${encodeURIComponent(wppMessage)}`;
+            }
+          });
+
+          // Animate text to response (first erase right-to-left, then type)
+          let responseTl = gsap.timeline();
+          let currentText = dialogueText.innerText;
+          let eraseObj = { p: 100 };
+
+          responseTl.to(eraseObj, {
+            p: 0,
+            duration: 0.5,
+            ease: "none",
+            onUpdate: () => {
+              dialogueText.innerText = currentText.substring(0, Math.round(currentText.length * (eraseObj.p / 100)));
+            }
+          })
+            .to(dialogueText, {
+              text: responseText,
+              duration: 1.5,
+              ease: "power2.out",
+              onComplete: () => {
+                gsap.to(linkBtns, {
+                  opacity: 1,
+                  y: 0,
+                  duration: 0.5,
+                  stagger: 0.1,
+                  ease: "back.out(1.5)",
+                  onComplete: () => {
+                    isLockedDown = false; // Release lock so they can scroll down
+                  }
+                });
+              }
+            });
+        }
+      });
+    });
+  });
+
+  var emailBtn = document.getElementById("email-btn");
+  emailBtn.addEventListener("click", () => {
+    navigator.clipboard.writeText('dudulougon@gmail.com').then(() => {
+      emailBtn.innerText = "E-mail copiado!";
+      setTimeout(() => {
+        emailBtn.innerText = "E-mail";
+      }, 2000);
+    });
+  });
+
 
   /// Logo Remover
 
