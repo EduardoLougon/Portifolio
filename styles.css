@@ -852,7 +852,6 @@ a.nav-h1 {
   background-image: url('Images/pattern.svg');
   background-repeat: repeat;
   background-attachment: fixed;
-  z-index: 10;
   position: relative;
   overflow: hidden;
 }
@@ -893,7 +892,7 @@ a.nav-h1 {
   grid-template-columns: repeat(24, 1fr);
   grid-template-rows: repeat(20, 1fr);
   gap: 1rem;
-  padding: 5rem 2rem;
+  padding: 3svh;
   position: relative;
 }
 
@@ -1089,4 +1088,58 @@ a.nav-h1 {
     grid-column: 14 / 24;
     grid-row: 12 / 19;
   }
+}
+
+.contatos-header {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  margin-top: calc(80px + 5svh);
+  z-index: 5002;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  pointer-events: none;
+  width: fit-content;
+  padding: 1rem;
+  border: 4px solid var(--primary-bg);
+  border-radius: 20px;
+  background-color: white;
+}
+
+.contatos-header::before {
+  content: '';
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 25px 25px 0;
+  border-style: solid;
+  border-color: var(--primary-bg) transparent transparent transparent;
+}
+
+.contatos-header::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 25px 25px 0;
+  border-style: solid;
+  border-color: white transparent transparent transparent;
+}
+
+.contatos-header h1 {
+  font-size: clamp(2rem, 8vw, 4rem);
+  font-family: "Jersey 25";
+  text-wrap: nowrap;
+  text-transform: uppercase;
+}
+
+.contatos-header h1 span {
+  color: #658350;
 }

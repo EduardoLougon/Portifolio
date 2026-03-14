@@ -1,7 +1,6 @@
 import Lenis from "https://esm.sh/lenis";
 import gsap from "https://esm.sh/gsap";
 import ScrollTrigger from "https://esm.sh/gsap/ScrollTrigger";
-import ScrollToPlugin from "https://esm.sh/gsap/ScrollToPlugin";
 import MorphSVGPlugin from "https://esm.sh/gsap/MorphSVGPlugin";
 import Draggable from "https://esm.sh/gsap/Draggable";
 import DrawSVGPlugin from "https://esm.sh/gsap/DrawSVGPlugin";
@@ -12,7 +11,7 @@ let cursosOffsetY = 7.5;
 document.addEventListener("DOMContentLoaded", () => {
 
   /// Scroll
-  gsap.registerPlugin(ScrollTrigger, MorphSVGPlugin, Draggable, ScrollToPlugin, DrawSVGPlugin);
+  gsap.registerPlugin(ScrollTrigger, MorphSVGPlugin, Draggable, DrawSVGPlugin);
 
   const lenis = new Lenis({
     duration: 1.2,
@@ -365,6 +364,23 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  /// Contato Header Animation
+
+  gsap.fromTo(".contatos-header", {
+    opacity: 0,
+    y: 100
+  }, {
+    opacity: 1,
+    y: 0,
+    duration: 1.5,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: ".contatos-header",
+      start: "top 60%",
+      toggleActions: "play none none reverse"
+    }
+  });
 
   /// Logo Remover
 
