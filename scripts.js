@@ -5,6 +5,7 @@ import MorphSVGPlugin from "https://esm.sh/gsap/MorphSVGPlugin";
 import Draggable from "https://esm.sh/gsap/Draggable";
 import DrawSVGPlugin from "https://esm.sh/gsap/DrawSVGPlugin";
 import TextPlugin from "https://esm.sh/gsap/TextPlugin";
+import { projectsData } from "./projects-data.js";
 
 let cursosOffsetX = 7.5;
 let cursosOffsetY = 7.5;
@@ -39,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
 
       const targetId = this.getAttribute('href');
-      if (targetId === '#') return;
+      if (targetId === '#' || targetId === '#case-study') return;
 
       const target = document.querySelector(targetId);
       if (target) {
@@ -47,10 +48,10 @@ document.addEventListener("DOMContentLoaded", () => {
         // This is crucial for pinned elements. We prioritize pinning triggers or those starting at exactly "top top".
         let targetY = target;
         let triggers = ScrollTrigger.getAll();
-        
+
         // Find the primary trigger for this target
         const primaryTrigger = triggers.find(t => t.trigger === target && (t.vars.pin === true || t.vars.start === "top top"));
-        
+
         if (primaryTrigger) {
           targetY = primaryTrigger.start;
         }
@@ -248,14 +249,322 @@ document.addEventListener("DOMContentLoaded", () => {
         ease: "power4.out"
       })
     })
+    card.addEventListener("click", (e) => {
+      e.preventDefault();
+      const projectId = card.dataset.project;
+      if (projectId) {
+        openProjectModal(projectId);
+      }
+    });
   })
+
+  /// Project Case Study Modal Logic
+  const projectModal = document.getElementById("project-modal");
+  const modalContent = document.getElementById("modal-content");
+  const modalCloseBtn = document.getElementById("modal-close-btn");
+  const modalBackdrop = document.getElementById("modal-backdrop");
+  const modalContainer = document.querySelector(".modal-container");
+  const modalDialog = document.querySelector(".modal-dialog");
+
+  const projectOrder = ["olympiads", "pethero", "corretar", "poucher"];
+
+  function openProjectModal(projectId) {
+    const project = projectsData[projectId];
+    if (!project) return;
+
+    const currentIndex = projectOrder.indexOf(projectId);
+    const nextIndex = (currentIndex + 1) % projectOrder.length;
+    const nextProject = projectsData[projectOrder[nextIndex]];
+
+    const techHtml = project.techStack
+      ? project.techStack
+        .map(
+          (t) => `
+            <div class="modal-tech-badge">
+              <img src="${t.logo}" alt="${t.name}">
+              <div>
+                <strong>${t.name}</strong>
+                <span>${t.role}</span>
+              </div>
+            </div>
+          `
+        )
+        .join("")
+      : "";
+
+    const gallery = project.gallery && project.gallery.length ? project.gallery : [project.heroImage];
+    const isCarousel = gallery.length > 1;
+
+    const visualHtml = isCarousel
+      ? `
+        <div class="modal-carousel" data-current="0" data-lenis-prevent>
+          <div class="modal-carousel-track" style="transform: translateX(0%);">
+            ${gallery
+        .map(
+          (img, idx) => `
+              <div class="modal-carousel-slide">
+                <img src="${img}" alt="${project.title} Preview ${idx + 1}" class="modal-carousel-img">
+              </div>
+            `
+        )
+        .join("")}
+          </div>
+          <button class="modal-carousel-btn prev" aria-label="Previous slide">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <button class="modal-carousel-btn next" aria-label="Next slide">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+          <div class="modal-carousel-dots">
+            ${gallery
+        .map(
+          (_, idx) => `
+              <button class="modal-carousel-dot ${idx === 0 ? "active" : ""}" data-slide="${idx}" aria-label="Slide ${idx + 1}"></button>
+            `
+        )
+        .join("")}
+          </div>
+          <div class="modal-carousel-counter">
+            <span class="carousel-current">1</span> / <span>${gallery.length}</span>
+          </div>
+        </div>
+      `
+      : `
+        <div class="modal-hero-visual">
+          <img src="${project.heroImage}" alt="${project.title} Preview" class="modal-hero-img">
+        </div>
+      `;
+
+    modalContent.innerHTML = `
+      <div class="modal-header">
+        <div class="modal-meta-top">
+          <span class="modal-badge">${project.number} / CASE STUDY</span>
+          <span class="modal-category">${project.category}</span>
+        </div>
+        <h1 class="modal-title">${project.title}</h1>
+        <p class="modal-tagline">${project.tagline}</p>
+
+        <div class="modal-meta-pills">
+          <div class="modal-pill">
+            <span class="modal-pill-label">Role</span>
+            <span class="modal-pill-value">${project.role}</span>
+          </div>
+          <div class="modal-pill">
+            <span class="modal-pill-label">Timeline</span>
+            <span class="modal-pill-value">${project.period}</span>
+          </div>
+          ${project.liveUrl && project.liveUrl !== "#" ? `
+            <a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="modal-live-btn">
+              <span>Visit Live Site</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </a>
+          ` : `
+            <div class="modal-pill modal-pill-status">
+              <span class="modal-pill-label">Status</span>
+              <span class="modal-pill-value">In Development</span>
+            </div>
+          `}
+        </div>
+      </div>
+
+      ${visualHtml}
+
+      <div class="modal-body">
+        <div class="modal-section modal-grid-two">
+          <div class="modal-block">
+            <h3 class="modal-section-title">Introduction</h3>
+            <p>${project.company}</p>
+          </div>
+          <div class="modal-block">
+            <h3 class="modal-section-title">My Work</h3>
+            <p>${project.myWork}</p>
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <h3 class="modal-section-title">Technologies</h3>
+          <div class="modal-tech-grid">
+            ${techHtml}
+          </div>
+        </div>
+
+        <div class="modal-footer-nav">
+          ${project.liveUrl && project.liveUrl !== "#" ? `
+            <a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="modal-live-btn-footer">
+              <span>Launch Live Project</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </a>
+          ` : `
+            <div class="modal-status-badge-footer">
+              <span class="status-pulse-dot"></span>
+              <span>Currently in Development</span>
+            </div>
+          `}
+          <button class="modal-next-btn" data-next="${nextProject.id}">
+            <span>Next Project (${nextProject.title})</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+    `;
+
+    // Reset scroll of modal dialog
+    if (modalDialog) {
+      modalDialog.scrollTop = 0;
+      modalDialog.setAttribute("tabindex", "-1");
+      setTimeout(() => modalDialog.focus({ preventScroll: true }), 50);
+    }
+
+    // Reset cursor to normal circle so hover image doesn't get stuck
+    cursosOffsetX = 7.5;
+    cursosOffsetY = 7.5;
+    gsap.to('.cursor', {
+      backgroundImage: 'none',
+      width: '15px',
+      height: '15px',
+      borderRadius: '50%',
+      mixBlendMode: 'difference',
+      duration: 0.2,
+      ease: "power4.out"
+    });
+
+    // Pause Lenis smooth scroll and lock body
+    lenis.stop();
+    document.body.style.overflow = "hidden";
+
+    // Show modal
+    projectModal.classList.add("active");
+    projectModal.setAttribute("aria-hidden", "false");
+  }
+
+  function closeProjectModal() {
+    projectModal.classList.remove("active");
+    projectModal.setAttribute("aria-hidden", "true");
+
+    // Resume Lenis smooth scroll and unlock body
+    lenis.start();
+    document.body.style.overflow = "";
+  }
+
+  // Prevent scroll events in modal from bubbling to window / Lenis
+  if (modalDialog) {
+    modalDialog.addEventListener("wheel", (e) => {
+      e.stopPropagation();
+    }, { passive: true });
+
+    modalDialog.addEventListener("touchmove", (e) => {
+      e.stopPropagation();
+    }, { passive: true });
+  }
+
+  if (modalCloseBtn) modalCloseBtn.addEventListener("click", closeProjectModal);
+  if (modalBackdrop) modalBackdrop.addEventListener("click", closeProjectModal);
+  if (modalContainer) {
+    modalContainer.addEventListener("click", (e) => {
+      if (e.target === modalContainer) {
+        closeProjectModal();
+      }
+    });
+  }
+
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && projectModal.classList.contains("active")) {
+      closeProjectModal();
+    }
+  });
+
+  if (modalContent) {
+    modalContent.addEventListener("click", (e) => {
+      // Next Project cycling
+      const nextBtn = e.target.closest(".modal-next-btn");
+      if (nextBtn) {
+        const nextId = nextBtn.getAttribute("data-next");
+        if (nextId) openProjectModal(nextId);
+        return;
+      }
+
+      // Carousel Controls
+      const carousel = e.target.closest(".modal-carousel");
+      if (!carousel) return;
+
+      const track = carousel.querySelector(".modal-carousel-track");
+      const slides = carousel.querySelectorAll(".modal-carousel-slide");
+      const dots = carousel.querySelectorAll(".modal-carousel-dot");
+      const counterCurrent = carousel.querySelector(".carousel-current");
+      if (!track || !slides.length) return;
+
+      let current = parseInt(carousel.dataset.current || "0", 10);
+      const total = slides.length;
+
+      const prevSlideBtn = e.target.closest(".modal-carousel-btn.prev");
+      const nextSlideBtn = e.target.closest(".modal-carousel-btn.next");
+      const dotBtn = e.target.closest(".modal-carousel-dot");
+
+      if (prevSlideBtn) {
+        current = (current - 1 + total) % total;
+      } else if (nextSlideBtn) {
+        current = (current + 1) % total;
+      } else if (dotBtn) {
+        current = parseInt(dotBtn.dataset.slide, 10);
+      } else {
+        return;
+      }
+
+      carousel.dataset.current = current;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      dots.forEach((d, idx) => {
+        d.classList.toggle("active", idx === current);
+      });
+      if (counterCurrent) {
+        counterCurrent.textContent = current + 1;
+      }
+    });
+
+    // Touch swipe support for the carousel
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    modalContent.addEventListener("touchstart", (e) => {
+      const carousel = e.target.closest(".modal-carousel");
+      if (!carousel) return;
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    modalContent.addEventListener("touchend", (e) => {
+      const carousel = e.target.closest(".modal-carousel");
+      if (!carousel) return;
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchEndX - touchStartX;
+      if (Math.abs(diff) > 40) {
+        const nextSlideBtn = carousel.querySelector(".modal-carousel-btn.next");
+        const prevSlideBtn = carousel.querySelector(".modal-carousel-btn.prev");
+        if (diff < 0 && nextSlideBtn) nextSlideBtn.click();
+        else if (diff > 0 && prevSlideBtn) prevSlideBtn.click();
+      }
+    }, { passive: true });
+  }
 
 
   /// Box Select + Competências H2 Animation
 
   const compH2 = document.querySelector('#competencias-h2');
   const compText = compH2.textContent;
-  const compSegmenter = new Intl.Segmenter("pt", { granularity: "grapheme" });
+  const compSegmenter = new Intl.Segmenter("en", { granularity: "grapheme" });
   const compChars = Array.from(compSegmenter.segment(compText), (s) => s.segment);
   compH2.innerHTML = compChars
     .map((char) => `<span>${char}</span>`)
@@ -304,12 +613,12 @@ document.addEventListener("DOMContentLoaded", () => {
     .to('#devCursor', { x: 160, y: 20, duration: 3.5, ease: "none" })
     .to('#devCursor', { x: 20, y: -10, duration: 2.5, ease: "none" });
 
-  // ClienteCursor — wanders around the top-right area
+  // DesignerCursor — wanders around the top-right area
   gsap.timeline({ repeat: -1, yoyo: true, delay: 2 })
-    .to('#clienteCursor', { x: 100, y: -30, duration: 4, ease: "none" })
-    .to('#clienteCursor', { x: 50, y: -70, duration: 3, ease: "none" })
-    .to('#clienteCursor', { x: 160, y: 20, duration: 3.5, ease: "none" })
-    .to('#clienteCursor', { x: 20, y: -10, duration: 2.5, ease: "none" });
+    .to('#designerCursor', { x: 100, y: -30, duration: 4, ease: "none" })
+    .to('#designerCursor', { x: 50, y: -70, duration: 3, ease: "none" })
+    .to('#designerCursor', { x: 160, y: 20, duration: 3.5, ease: "none" })
+    .to('#designerCursor', { x: 20, y: -10, duration: 2.5, ease: "none" });
 
   // EduardoCursor — wanders around the bottom-left area
   gsap.timeline({ repeat: -1, yoyo: true, delay: 4.5 })
@@ -474,9 +783,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const texts = [
-    "Opa, que bom que você chegou até aqui!",
-    "Gostou do que viu? Que tal construirmos algo incrível juntos?",
-    "Me diz uma coisa... O que te traz por aqui hoje?"
+    "Hey there, glad you made it this far!",
+    "Liked what you saw? How about we build something incredible together?",
+    "Tell me something... What brings you here today?"
   ];
 
   let str1 = { p: 100 };
@@ -529,14 +838,14 @@ document.addEventListener("DOMContentLoaded", () => {
           let wppMessage = "";
 
           if (choice === "A") {
-            responseText = "Incrível! Vamos tirar essa ideia do papel. A forma mais rápida de falarmos sobre isso é pelo WhatsApp. Me chama lá!";
-            wppMessage = "Olá Eduardo, vi seu portfólio e tenho um projeto em mente para conversarmos!";
+            responseText = "Awesome! Let's bring that idea to life. The fastest way to talk is via WhatsApp. Drop me a line!";
+            wppMessage = "Hi Eduardo, I saw your portfolio and have a project in mind to discuss!";
           } else if (choice === "B") {
-            responseText = "Fico lisonjeado! Estou sempre aberto a grandes desafios e equipes inovadoras. O LinkedIn é o melhor lugar para trocarmos uma ideia.";
-            wppMessage = "Olá Eduardo, estava olhando seu portfólio e gostaria de conversar sobre uma oportunidade na minha equipe.";
+            responseText = "I'm honored! I'm always open to exciting challenges and innovative teams. LinkedIn is the best place to connect.";
+            wppMessage = "Hi Eduardo, I was checking out your portfolio and would like to chat about an opportunity on my team.";
           } else {
-            responseText = "Muito obrigado! Fico feliz que tenha curtido. Sinta-se à vontade para se conectar comigo no LinkedIn para acompanharmos o trabalho um do outro!";
-            wppMessage = "Fala Eduardo! Passando só para dizer que curti muito o seu portfólio. Parabéns!";
+            responseText = "Thank you so much! Really glad you liked it. Feel free to connect with me on LinkedIn so we can follow each other's work!";
+            wppMessage = "Hey Eduardo! Just dropping by to say I really enjoyed your portfolio. Great work!";
           }
 
           linkBtns.forEach(link => {
@@ -591,10 +900,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   var emailBtn = document.getElementById("email-btn");
   emailBtn.addEventListener("click", () => {
-    navigator.clipboard.writeText('dudulougon@gmail.com').then(() => {
-      emailBtn.innerText = "E-mail copiado!";
+    navigator.clipboard.writeText('elougonsampaiolopes@ucsd.edu').then(() => {
+      emailBtn.innerText = "Email copied!";
       setTimeout(() => {
-        emailBtn.innerText = "E-mail";
+        emailBtn.innerText = "Email";
       }, 2000);
     });
   });
