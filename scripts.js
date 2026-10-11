@@ -367,9 +367,9 @@ document.addEventListener("DOMContentLoaded", () => {
               </svg>
             </a>
           ` : `
-            <div class="modal-pill modal-pill-status">
+            <div class="modal-pill modal-pill-status ${project.status === "Archived" ? "status-archived" : ""}">
               <span class="modal-pill-label">Status</span>
-              <span class="modal-pill-value">In Development</span>
+              <span class="modal-pill-value">${project.status || "In Development"}</span>
             </div>
           `}
         </div>
@@ -399,7 +399,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="modal-footer-nav">
           ${project.liveUrl && project.liveUrl !== "#" ? `
             <a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="modal-live-btn-footer">
-              <span>Launch Live Project</span>
+              <span>Visit Live Site</span>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                 <polyline points="15 3 21 3 21 9"></polyline>
@@ -407,9 +407,9 @@ document.addEventListener("DOMContentLoaded", () => {
               </svg>
             </a>
           ` : `
-            <div class="modal-status-badge-footer">
+            <div class="modal-status-badge-footer ${project.status === "Archived" ? "status-archived" : ""}">
               <span class="status-pulse-dot"></span>
-              <span>Currently in Development</span>
+              <span>${project.status === "Archived" ? "Archived" : (project.status || "Currently in Development")}</span>
             </div>
           `}
           <button class="modal-next-btn" data-next="${nextProject.id}">

@@ -12,7 +12,7 @@ export const projectsData = {
     role: "UI/UX Design & FullStack Dev.",
     category: "EdTech / Competitive Programming",
     period: "2024 — 2026",
-    liveUrl: "https://olympiads.dev/",
+    status: "Archived",
     heroImage: "Images/OlympiadsImage.webp",
     gallery: [
       "Images/OlympiadsImage.webp"

@@ -1518,6 +1518,13 @@ a.nav-h1 {
   }
 }
 
+.modal-pill-status.status-archived .modal-pill-value::before,
+.modal-status-badge-footer.status-archived .status-pulse-dot {
+  background: #64748B;
+  box-shadow: 0 0 0 3px rgba(100, 116, 139, 0.2);
+  animation: none;
+}
+
 .modal-hero-visual {
   width: 100%;
   border-radius: 18px;
